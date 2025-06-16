@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Footer Component</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary: #0052CC; /* Jio-inspired vibrant blue */
+            --accent: #FF3D00; /* Hotstar/Jio-inspired red-orange */
+            --dark: #1A2526; /* Sleek dark teal-gray */
+            --light: #F5F7FA; /* Clean light gray */
+        }
+        footer {
+            background: transparent;
+            color: var(--dark);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 0.875rem; /* 14px */
+            text-align: center;
+            padding: 1.5rem 1rem; /* 24px 16px */
+            margin-top: 2rem; /* 32px */
+        }
+        .unique-hire {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        @media (max-width: 480px) {
+            footer {
+                font-size: 0.75rem; /* 12px */
+                padding: 1rem 0.5rem; /* 16px 8px */
+            }
+        }
+    </style>
+</head>
+<body>
+    <footer class="w-full">
+        <p>
+            © 2025 Uttarakhand TB Health Mission | Powered by <a class="unique-hire" href="https://uniquehire.co.in/" target="_blank"
+                aria-label="Visit UniqueHire website">UniqueHire</a>. All rights reserved.
+        </p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TB Patient Monitoring Program Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles to fine-tune the design */
+        .bg-gradient-green-teal {
+            background: linear-gradient(to right, #16a34a, #0d9488);
+        }
+        .bg-gradient-blue {
+            background: linear-gradient(to bottom right, #3b82f6, #2563eb);
+        }
+        .bg-gradient-green {
+            background: linear-gradient(to bottom right, #10b981, #059669);
+        }
+        .bg-gradient-purple {
+            background: linear-gradient(to bottom right, #8b5cf6, #7c3aed);
+        }
+        .bg-gradient-red {
+            background: linear-gradient(to bottom right, #ef4444, #dc2626);
+        }
+        /* Adjust table for better mobile responsiveness */
+        @media (max-width: 768px) {
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <!-- Main Container -->
+    <div class="max-w-7xl mx-auto p-4 space-y-6">
+        <!-- Header -->
+        <div class="bg-gradient-green-teal text-white p-6 rounded-lg">
+            <h1 class="text-3xl font-bold mb-2">TB Patient Monitoring Program Dashboard</h1>
+            <p class="text-green-100">Public health analytics and program transparency</p>
+            
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                <!-- State -->
+                <div>
+                    <label class="block text-sm font-medium text-green-100 mb-2">State</label>
+                    <div class="bg-white/20 rounded px-3 py-2 text-white font-medium">Telangana</div>
+                </div>
+                <!-- Year Range -->
+                <div>
+                    <label class="block text-sm font-medium text-green-100 mb-2">Year Range</label>
+                    <select class="bg-white/20 border-white/30 text-white rounded px-3 py-2 w-full">
+                        <option value="2023-2024" selected>2023-2024</option>
+                        <option value="2022-2023">2022-2023</option>
+                        <option value="2021-2022">2021-2022</option>
+                    </select>
+                </div>
+                <!-- Program Focus -->
+                <div>
+                    <label class="block text-sm font-medium text-green-100 mb-2">Program Focus</label>
+                    <div class="bg-white/20 rounded px-3 py-2 text-white font-medium">TB Monitoring</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Program Focus Areas (Key Metrics) -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <!-- Total Registered TB Patients -->
+            <div class="bg-gradient-blue text-white rounded-lg shadow">
+                <div class="p-6 text-center">
+                    <div class="text-2xl font-bold">124,531</div>
+                    <div class="text-sm opacity-90">Total Registered TB Patients</div>
+                </div>
+            </div>
+            <!-- Patients Under Treatment -->
+            <div class="bg-gradient-green text-white rounded-lg shadow">
+                <div class="p-6 text-center">
+                    <div class="text-2xl font-bold">115,208</div>
+                    <div class="text-sm opacity-90">Patients Under Treatment</div>
+                </div>
+            </div>
+            <!-- Treatment Completed -->
+            <div class="bg-gradient-purple text-white rounded-lg shadow">
+                <div class="p-6 text-center">
+                    <div class="text-2xl font-bold">94,822</div>
+                    <div class="text-sm opacity-90">Treatment Completed</div>
+                </div>
+            </div>
+            <!-- Patients Dropped Out -->
+            <div class="bg-gradient-red text-white rounded-lg shadow">
+                <div class="p-6 text-center">
+                    <div class="text-2xl font-bold">4,320</div>
+                    <div class="text-sm opacity-90">Patients Dropped Out</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TB Patient Monitoring Applications Table -->
+        <div class="bg-white rounded-lg shadow">
+            <div class="p-6">
+                <h2 class="text-xl font-bold">TB Patient Monitoring Applications</h2>
+                <p class="text-sm text-gray-600 mb-4">Service delivery metrics and processing times for TB program services</p>
+                <div class="overflow-x-auto">
+                    <table class="w-full border-collapse border border-gray-300 text-sm">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="border border-gray-300 px-3 py-2 text-left">S. No</th>
+                                <th class="border border-gray-300 px-3 py-2 text-left">Service Type</th>
+                                <th class="border border-gray-300 px-3 py-2 text-left">Time Limit (Weeks)</th>
+                                <th class="border border-gray-300 px-3 py-2 text-left">Total Applications Received</th>
+                                <th class="border border-gray-300 px-3 py-2 text-left">Total Applications Approved</th>
+                                <th class="border border-gray-300 px-3 py-2 text-left">Total Applications Rejected</th>
+                                <th class="border border-gray-300 px-3 py-2 text-left">Min Time Taken (Weeks)</th>
+                                <th class="border border-gray-300 px-3 py-2 text-left">Avg Time Taken (Weeks)</th>
+                                <th class="border border-gray-300 px-3 py-2 text-left">Max Time Taken (Weeks)</th>
+                                <th class="border border-gray-300 px-3 py-2 text-left">Median Time Taken (Weeks)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border border-gray-300 px-3 py-2">1</td>
+                                <td class="border border-gray-300 px-3 py-2 font-medium">Patient Registration</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">2</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">5,000</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center text-green-600 font-medium">4,500</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center text-red-600 font-medium">500</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">1</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center font-medium text-blue-600">3</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">6</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">4</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border border-gray-300 px-3 py-2">2</td>
+                                <td class="border border-gray-300 px-3 py-2 font-medium">Treatment Initiation</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">3</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">4,800</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center text-green-600 font-medium">4,500</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center text-red-600 font-medium">300</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">2</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center font-medium text-blue-600">4</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">7</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">5</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border border-gray-300 px-3 py-2">3</td>
+                                <td class="border border-gray-300 px-3 py-2 font-medium">Diagnostic Test Approval</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">1</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">4,000</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center text-green-600 font-medium">3,800</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center text-red-600 font-medium">200</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">1</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center font-medium text-blue-600">2</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">5</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">3</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border border-gray-300 px-3 py-2">4</td>
+                                <td class="border border-gray-300 px-3 py-2 font-medium">Medication Regimen Approval</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">2</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">4,600</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center text-green-600 font-medium">4,400</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center text-red-600 font-medium">200</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">1</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center font-medium text-blue-600">3</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">6</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">4</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border border-gray-300 px-3 py-2">5</td>
+                                <td class="border border-gray-300 px-3 py-2 font-medium">Patient Adherence Monitoring</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">2</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">4,500</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center text-green-600 font-medium">4,300</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center text-red-600 font-medium">200</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">1</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center font-medium text-blue-600">3</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">6</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">4</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border border-gray-300 px-3 py-2">6</td>
+                                <td class="border border-gray-300 px-3 py-2 font-medium">Treatment Completion Verification</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">3</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">4,700</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center text-green-600 font-medium">4,500</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center text-red-600 font-medium">200</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">2</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center font-medium text-blue-600">4</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">7</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">5</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Patient Treatment Timeliness Analysis -->
+        <div class="bg-white rounded-lg shadow">
+            <div class="p-6">
+                <h2 class="text-xl font-bold">Patient Treatment Timeliness Analysis</h2>
+                <p class="text-sm text-gray-600 mb-4">Time analysis for key TB program processes</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Minimum Time for Patient Registration -->
+                    <div class="bg-blue-50 p-6 rounded-lg">
+                        <h3 class="font-bold text-blue-800 mb-2">Minimum Time for Patient Registration</h3>
+                        <div class="text-3xl font-bold text-blue-600">1 Week</div>
+                        <p class="text-sm text-blue-600 mt-2">Fastest registration process</p>
+                    </div>
+                    <!-- Average Time for Diagnostic Approval -->
+                    <div class="bg-green-50 p-6 rounded-lg">
+                        <h3 class="font-bold text-green-800 mb-2">Average Time for Diagnostic Approval</h3>
+                        <div class="text-3xl font-bold text-green-600">2 Weeks</div>
+                        <p class="text-sm text-green-600 mt-2">Standard processing time</p>
+                    </div>
+                    <!-- Maximum Time for Treatment Verification -->
+                    <div class="bg-purple-50 p-6 rounded-lg">
+                        <h3 class="font-bold text-purple-800 mb-2">Maximum Time for Treatment Verification</h3>
+                        <div class="text-3xl font-bold text-purple-600">7 Weeks</div>
+                        <p class="text-sm text-purple-600 mt-2">Longest verification time</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Statistics -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Service Efficiency Metrics -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-6">
+                    <h2 class="text-xl font-bold">Service Efficiency Metrics</h2>
+                    <p class="text-sm text-gray-600 mb-4">Overall program performance indicators</p>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center p-3 bg-green-50 rounded">
+                            <span class="font-medium">Average Approval Rate</span>
+                            <span class="text-2xl font-bold text-green-600">92.8%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-blue-50 rounded">
+                            <span class="font-medium">Average Processing Time</span>
+                            <span class="text-2xl font-bold text-blue-600">3.2 Weeks</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-purple-50 rounded">
+                            <span class="font-medium">Total Applications Processed</span>
+                            <span class="text-2xl font-bold text-purple-600">27,600</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Program Transparency -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-6">
+                    <h2 class="text-xl font-bold">Program Transparency</h2>
+                    <p class="text-sm text-gray-600 mb-4">Public accountability measures</p>
+                    <div class="space-y-4">
+                        <div class="p-4 border border-gray-200 rounded">
+                            <h4 class="font-bold text-gray-800 mb-2">Data Reporting Frequency</h4>
+                            <p class="text-sm text-gray-600">Updated daily at 6:00 AM IST</p>
+                        </div>
+                        <div class="p-4 border border-gray-200 rounded">
+                            <h4 class="font-bold text-gray-800 mb-2">Grievance Redressal</h4>
+                            <p class="text-sm text-gray-600">24/7 helpline: 1800-TB-HELP</p>
+                        </div>
+                        <div class="p-4 border border-gray-200 rounded">
+                            <h4 class="font-bold text-gray-800 mb-2">Data Accuracy</h4>
+                            <p class="text-sm text-gray-600">Verified through multiple sources</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="bg-gray-100 p-4 rounded-lg text-center">
+            <p class="text-sm text-gray-600">
+                © 2025 TB Health Mission Dashboard | Powered by UniqueHire | Government of Telangana
+            </p>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uttarakhand TB Patient Monitoring Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome CDN for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Custom gradient for header (used in the dashboard header, not the included header) */
+        .bg-gradient-blue-green {
+            background: linear-gradient(to right, #2563eb, #16a34a);
+        }
+        /* Ensure the iframe has no border and fits seamlessly */
+        iframe {
+            border: none;
+            width: 100%;
+            height: 200px; /* Adjust height to fit the header content */
+            display: block;
+        }
+        /* Ensure table is scrollable on mobile */
+        @media (max-width: 768px) {
+            .table-container {
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
+        /* Ensure table is scrollable on desktop as well by setting a wide min-width */
+        .table-container {
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+        table {
+            min-width: 1200px; /* Force the table to be wider than the viewport to trigger horizontal scrolling */
+        }
+        /* Adjust chart container heights */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+        }
+        /* Adjust smaller chart container for pie chart */
+        .chart-container-small {
+            position: relative;
+            width: 100%;
+            height: 250px;
+        }
+        /* Ensure the body can scroll vertically and horizontally */
+        html, body {
+            margin: 0;
+            padding: 0;
+            overflow-x: auto; /* Allow horizontal scrolling at the page level */
+            overflow-y: auto; /* Allow vertical scrolling at the page level */
+            height: auto;
+            width: auto;
+        }
+        /* Explicit font stack */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        /* Icon styling for user and logout */
+        .header-icon {
+            font-size: 1.25rem; /* 20px */
+            color: #1f2937; /* Gray-800, same as nav links */
+            opacity: 0.9;
+            transition: opacity 0.2s;
+        }
+        .header-icon:hover {
+            opacity: 1;
+        }
+        /* Navigation link styling */
+        .nav-link {
+            color: #1f2937; /* Gray-800 */
+            font-size: 1rem; /* 16px */
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem; /* Space between icon and text */
+            border-radius: 0.25rem; /* Slight rounding for active link */
+        }
+        .nav-link:hover {
+            color: #2563eb; /* Blue-600 on hover */
+            text-decoration: underline;
+        }
+        /* Active link styling */
+        .nav-link.active {
+            background-color: #000000; /* Black background */
+            color: #ffffff; /* White text */
+        }
+        .nav-link.active:hover {
+            color: #ffffff; /* Keep white on hover */
+            text-decoration: none; /* Remove underline on hover for active link */
+        }
+        /* Ensure icons in nav links match text color */
+        .nav-link i {
+            color: inherit; /* Inherit color from parent (nav-link) */
+        }
+        /* Adjust header text colors to contrast with white background */
+        header h1 {
+            color: #1f2937; /* Gray-800 */
+        }
+        header p {
+            color: #6b7280; /* Gray-500 */
+        }
+        header .user-text {
+            color: #1f2937; /* Gray-800 */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans">
+    <!-- Include the header using an iframe -->
+    <iframe src="../pages/TB_Dash_Header.html" title="Header" id="header-iframe"></iframe>
+
+    <!-- Main Container -->
+    <div class="max-w-7xl mx-auto p-4 space-y-6">
+        <!-- Dashboard Header -->
+        <div class="bg-gradient-blue-green text-white p-6 rounded-lg">
+            <h1 class="text-3xl font-bold mb-2">Uttarakhand TB Patient Monitoring Dashboard</h1>
+            <p class="text-blue-100">Comprehensive overview of tuberculosis program performance in Uttarakhand</p>
+        </div>
+
+        <!-- Top Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Program Overview -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-6">
+                    <h2 class="text-lg font-bold text-blue-600 mb-3">Program Overview</h2>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Patients Registered</span>
+                            <span class="font-bold text-green-600">2,490</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Treatment Started</span>
+                            <span class="font-bold text-blue-600">2,304</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Facilities Onboarded</span>
+                            <span class="font-bold text-purple-600">112</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Healthcare Workers</span>
+                            <span class="font-bold text-teal-600">76</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Diagnostic Summary -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-6">
+                    <h2 class="text-lg font-bold text-green-600 mb-3">Diagnostic Summary</h2>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Sputum Tests Conducted</span>
+                            <span class="font-bold text-green-600">1,900</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">CB-NAAT Tests</span>
+                            <span class="font-bold text-blue-600">700</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Chest X-Rays</span>
+                            <span class="font-bold text-purple-600">560</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Labs Integrated</span>
+                            <span class="font-bold text-teal-600">8</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Monitoring & Compliance -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-6">
+                    <h2 class="text-lg font-bold text-purple-600 mb-3">Monitoring & Compliance</h2>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Missed Doses Tracked</span>
+                            <span class="font-bold text-red-600">64</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Field Visits Logged</span>
+                            <span class="font-bold text-green-600">378</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Escalations Raised</span>
+                            <span class="font-bold text-orange-600">15</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Teleconsultations Done</span>
+                            <span class="font-bold text-blue-600">198</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row 1 -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Diagnostics by Type (2023 vs 2024) -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-6">
+                    <h2 class="text-xl font-bold">Diagnostics by Type (2023 vs 2024)</h2>
+                    <p class="text-sm text-gray-600 mb-4">Comparison of diagnostic test volumes in Uttarakhand</p>
+                    <div class="chart-container">
+                        <canvas id="diagnosticsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <!-- Treatment Outcomes Over Time -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-6">
+                    <h2 class="text-xl font-bold">Treatment Outcomes Over Time</h2>
+                    <p class="text-sm text-gray-600 mb-4">Patient treatment progress trends in Uttarakhand</p>
+                    <div class="chart-container">
+                        <canvas id="treatmentOutcomesChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row 2 -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Treatment Status Distribution -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-6">
+                    <h2 class="text-xl font-bold">Treatment Status Distribution</h2>
+                    <p class="text-sm text-gray-600 mb-4">Current patient status breakdown in Uttarakhand</p>
+                    <div class="chart-container-small">
+                        <canvas id="treatmentDistributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <!-- Program KPIs -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-6">
+                    <h2 class="text-xl font-bold">Program KPIs</h2>
+                    <p class="text-sm text-gray-600 mb-4">Key performance indicators in Uttarakhand</p>
+                    <div class="space-y-4">
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-sm">Treatment Initiation Rate</span>
+                                <span class="font-bold text-blue-600">70%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-blue-600 h-2 rounded-full" style="width: 70%;"></div>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-sm">Missed Dose Follow-up Rate</span>
+                                <span class="font-bold text-orange-600">41%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-orange-600 h-2 rounded-full" style="width: 41%;"></div>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-sm">Treatment Completion Rate</span>
+                                <span class="font-bold text-green-600">56%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-green-600 h-2 rounded-full" style="width: 56%;"></div>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-sm">Lab Result Entry Timeliness</span>
+                                <span class="font-bold text-purple-600">79%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="bg-purple-600 h-2 rounded-full" style="width: 79%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Top Performing Labs -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-6">
+                    <h2 class="text-xl font-bold">Top Performing Labs</h2>
+                    <p class="text-sm text-gray-600 mb-4">Leading diagnostic facilities in Uttarakhand</p>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center p-2 bg-gray-50 rounded">
+                            <div>
+                                <div class="font-medium text-sm">Dehradun TB Lab</div>
+                                <div class="text-xs text-gray-600">₹120 per test</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-bold text-blue-600">500</div>
+                                <div class="text-xs text-gray-600">tests</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center p-2 bg-gray-50 rounded">
+                            <div>
+                                <div class="font-medium text-sm">Haldwani Diagnostics</div>
+                                <div class="text-xs text-gray-600">₹80 per test</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-bold text-blue-600">440</div>
+                                <div class="text-xs text-gray-600">tests</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center p-2 bg-gray-50 rounded">
+                            <div>
+                                <div class="font-medium text-sm">Rishikesh TB Center</div>
+                                <div class="text-xs text-gray-600">₹500 per test</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-bold text-blue-600">360</div>
+                                <div class="text-xs text-gray-600">tests</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center p-2 bg-gray-50 rounded">
+                            <div>
+                                <div class="font-medium text-sm">Haridwar Pathology</div>
+                                <div class="text-xs text-gray-600">₹150 per test</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-bold text-blue-600">300</div>
+                                <div class="text-xs text-gray-600">tests</div>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center p-2 bg-gray-50 rounded">
+                            <div>
+                                <div class="font-medium text-sm">Almora TB Lab</div>
+                                <div class="text-xs text-gray-600">₹180 per test</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-bold text-blue-600">240</div>
+                                <div class="text-xs text-gray-600">tests</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Revenue from Diagnostics -->
+        <div class="bg-white rounded-lg shadow">
+            <div class="p-6">
+                <h2 class="text-xl font-bold">Revenue from Diagnostics</h2>
+                <p class="text-sm text-gray-600 mb-4">Financial performance by diagnostic type in Uttarakhand</p>
+                <div class="chart-container">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Health Program Indicators Table -->
+        <div class="bg-white rounded-lg shadow">
+            <div class="p-6">
+                <h2 class="text-xl font-bold">Health Program Indicators</h2>
+                <p class="text-sm text-gray-600 mb-4">Key health metrics and statistics in Uttarakhand</p>
+                <div class="table-container">
+                    <table class="w-full border-collapse border border-gray-300">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="border border-gray-300 px-4 py-2 text-left">S.No</th>
+                                <th class="border border-gray-300 px-4 py-2 text-left">Indicator</th>
+                                <th class="border border-gray-300 px-4 py-2 text-left">Value</th>
+                                <th class="border border-gray-300 px-4 py-2 text-left">Region</th>
+                                <th class="border border-gray-300 px-4 py-2 text-left">Year</th>
+                                <th class="border border-gray-300 px-4 py-2 text-left">Source</th>
+                                <th class="border border-gray-300 px-4 py-2 text-left">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border border-gray-300 px-4 py-2">1</td>
+                                <td class="border border-gray-300 px-4 py-2">Total Registered TB Patients</td>
+                                <td class="border border-gray-300 px-4 py-2 font-bold text-blue-600">2,490</td>
+                                <td class="border border-gray-300 px-4 py-2">Uttarakhand</td>
+                                <td class="border border-gray-300 px-4 py-2">2024</td>
+                                <td class="border border-gray-300 px-4 py-2">TB Program Database</td>
+                                <td class="border border-gray-300 px-4 py-2 text-green-600">Active</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border border-gray-300 px-4 py-2">2</td>
+                                <td class="border border-gray-300 px-4 py-2">Patients Under Treatment</td>
+                                <td class="border border-gray-300 px-4 py-2 font-bold text-blue-600">2,208</td>
+                                <td class="border border-gray-300 px-4 py-2">Uttarakhand</td>
+                                <td class="border border-gray-300 px-4 py-2">2024</td>
+                                <td class="border border-gray-300 px-4 py-2">TB Program Database</td>
+                                <td class="border border-gray-300 px-4 py-2 text-green-600">Active</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border border-gray-300 px-4 py-2">3</td>
+                                <td class="border border-gray-300 px-4 py-2">Missed Dose Cases</td>
+                                <td class="border border-gray-300 px-4 py-2 font-bold text-blue-600">64</td>
+                                <td class="border border-gray-300 px-4 py-2">Uttarakhand</td>
+                                <td class="border border-gray-300 px-4 py-2">2024</td>
+                                <td class="border border-gray-300 px-4 py-2">Field Reports</td>
+                                <td class="border border-gray-300 px-4 py-2 text-orange-600">Pending Review</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border border-gray-300 px-4 py-2">4</td>
+                                <td class="border border-gray-300 px-4 py-2">Patients Cured</td>
+                                <td class="border border-gray-300 px-4 py-2 font-bold text-blue-600">1,904</td>
+                                <td class="border border-gray-300 px-4 py-2">Uttarakhand</td>
+                                <td class="border border-gray-300 px-4 py-2">2024</td>
+                                <td class="border border-gray-300 px-4 py-2">TB Program Database</td>
+                                <td class="border border-gray-300 px-4 py-2 text-green-600">Completed</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border border-gray-300 px-4 py-2">5</td>
+                                <td class="border border-gray-300 px-4 py-2">Deaths Recorded</td>
+                                <td class="border border-gray-300 px-4 py-2 font-bold text-blue-600">25</td>
+                                <td class="border border-gray-300 px-4 py-2">Uttarakhand</td>
+                                <td class="border border-gray-300 px-4 py-2">2024</td>
+                                <td class="border border-gray-300 px-4 py-2">Health Records</td>
+                                <td class="border border-gray-300 px-4 py-2 text-red-600">Closed</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <iframe src="../pages/TB_Dash_Footer.html" frameborder="0" style="height: 110px;overflow: auto;"></iframe>
+    </div>
+
+    <!-- JavaScript to Render Charts -->
+    <script>
+        // Data from React Component, adjusted for Uttarakhand
+        const diagnosticsData = [
+            { name: 'Sputum Microscopy', '2023': 900, '2024': 1040 },
+            { name: 'CB-NAAT', '2023': 500, '2024': 700 },
+            { name: 'LPA', '2023': 160, '2024': 240 },
+            { name: 'Culture', '2023': 300, '2024': 360 },
+            { name: 'Chest X-Ray', '2023': 400, '2024': 560 },
+            { name: 'Other', '2023': 100, '2024': 160 }
+        ];
+
+        const treatmentOutcomes = [
+            { name: 'Jan', diagnosed: 160, initiated: 144, cured: 130, dropouts: 16 },
+            { name: 'Feb', diagnosed: 170, initiated: 156, cured: 140, dropouts: 14 },
+            { name: 'Mar', diagnosed: 180, initiated: 162, cured: 150, dropouts: 18 },
+            { name: 'Apr', diagnosed: 176, initiated: 160, cured: 144, dropouts: 12 },
+            { name: 'May', diagnosed: 184, initiated: 168, cured: 156, dropouts: 13 },
+            { name: 'Jun', diagnosed: 190, initiated: 174, cured: 160, dropouts: 11 }
+        ];
+
+        const treatmentDistribution = [
+            { name: 'Cured', value: 60, color: '#10B981' },
+            { name: 'Under Treatment', value: 30, color: '#3B82F6' },
+            { name: 'Dropped Out', value: 10, color: '#EF4444' }
+        ];
+
+        const revenueData = [
+            { name: 'Sputum', revenue: 0.05, tests: 1040 },
+            { name: 'CB-NAAT', revenue: 0.07, tests: 700 },
+            { name: 'LPA', revenue: 0.024, tests: 240 },
+            { name: 'X-ray', revenue: 0.056, tests: 560 },
+            { name: 'Others', revenue: 0.016, tests: 160 }
+        ];
+
+        // Diagnostics by Type (2023 vs 2024) - Bar Chart
+        new Chart(document.getElementById('diagnosticsChart'), {
+            type: 'bar',
+            data: {
+                labels: diagnosticsData.map(item => item.name),
+                datasets: [
+                    {
+                        label: '2023',
+                        data: diagnosticsData.map(item => item['2023']),
+                        backgroundColor: '#94A3B8',
+                        borderColor: '#94A3B8',
+                        borderWidth: 1
+                    },
+                    {
+                        label: '2024',
+                        data: diagnosticsData.map(item => item['2024']),
+                        backgroundColor: '#3B82F6',
+                        borderColor: '#3B82F6',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        ticks: {
+                            autoSkip: false,
+                            maxRotation: 45,
+                            minRotation: 45,
+                            font: { size: 12 }
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        max: 1200,
+                        ticks: { stepSize: 300 }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // Treatment Outcomes Over Time - Line Chart
+        new Chart(document.getElementById('treatmentOutcomesChart'), {
+            type: 'line',
+            data: {
+                labels: treatmentOutcomes.map(item => item.name),
+                datasets: [
+                    {
+                        label: 'Diagnosed',
+                        data: treatmentOutcomes.map(item => item.diagnosed),
+                        borderColor: '#8B5CF6',
+                        backgroundColor: '#8B5CF6',
+                        fill: false,
+                        tension: 0.1
+                    },
+                    {
+                        label: 'Initiated',
+                        data: treatmentOutcomes.map(item => item.initiated),
+                        borderColor: '#3B82F6',
+                        backgroundColor: '#3B82F6',
+                        fill: false,
+                        tension: 0.1
+                    },
+                    {
+                        label: 'Cured',
+                        data: treatmentOutcomes.map(item => item.cured),
+                        borderColor: '#10B981',
+                        backgroundColor: '#10B981',
+                        fill: false,
+                        tension: 0.1
+                    },
+                    {
+                        label: 'Dropouts',
+                        data: treatmentOutcomes.map(item => item.dropouts),
+                        borderColor: '#EF4444',
+                        backgroundColor: '#EF4444',
+                        fill: false,
+                        tension: 0.1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        ticks: { font: { size: 12 } }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        max: 200,
+                        ticks: { stepSize: 50 }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // Treatment Status Distribution - Pie Chart
+        new Chart(document.getElementById('treatmentDistributionChart'), {
+            type: 'pie',
+            data: {
+                labels: treatmentDistribution.map(item => item.name),
+                datasets: [{
+                    data: treatmentDistribution.map(item => item.value),
+                    backgroundColor: treatmentDistribution.map(item => item.color),
+                    borderColor: treatmentDistribution.map(item => item.color),
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.label}: ${context.raw}%`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Revenue from Diagnostics - Bar Chart
+        new Chart(document.getElementById('revenueChart'), {
+            type: 'bar',
+            data: {
+                labels: revenueData.map(item => item.name),
+                datasets: [{
+                    label: 'Revenue (₹ Lakhs)',
+                    data: revenueData.map(item => item.revenue),
+                    backgroundColor: '#10B981',
+                    borderColor: '#10B981',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        ticks: { font: { size: 12 } }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        max: 0.1,
+                        ticks: { stepSize: 0.025 }
+                    }
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `₹${context.raw} Lakhs`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // JavaScript to set the active navigation link
+        document.addEventListener('DOMContentLoaded', () => {
+            const iframe = document.getElementById('header-iframe');
+            iframe.addEventListener('load', () => {
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                const navLinks = iframeDoc.querySelectorAll('.nav-link');
+                const currentPage = 'National_TB_Patient_Monitoring'; // Match the data-page attribute
+
+                navLinks.forEach(link => {
+                    if (link.getAttribute('data-page') === currentPage) {
+                        link.classList.add('active');
+                    } else {
+                        link.classList.remove('active');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

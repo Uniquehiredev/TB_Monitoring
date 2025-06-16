@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uttarakhand TB Patient Monitoring Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Custom gradient for header */
+        .bg-gradient-green-blue {
+            background: linear-gradient(to right, #16a34a, #2563eb);
+        }
+
+        /* Ensure table is scrollable on mobile */
+        @media (max-width: 768px) {
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
+
+        /* Adjust chart container heights */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 300px;
+        }
+
+        /* Ensure the iframe has no border and fits seamlessly */
+        iframe {
+            border: none;
+            width: 100%;
+            height: 200px;
+            /* Adjust height to fit the header content */
+            display: block;
+        }
+
+        /* Ensure the body can scroll vertically and horizontally */
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            overflow-x: auto;
+            /* Allow horizontal scrolling at the page level */
+            overflow-y: auto;
+            /* Allow vertical scrolling at the page level */
+            height: auto;
+            width: auto;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        /* Icon styling for user and logout */
+        .header-icon {
+            font-size: 1.25rem;
+            /* 20px */
+            color: #1f2937;
+            /* Gray-800, same as nav links */
+            opacity: 0.9;
+            transition: opacity 0.2s;
+        }
+
+        .header-icon:hover {
+            opacity: 1;
+        }
+
+        /* Navigation link styling */
+        .nav-link {
+            color: #1f2937;
+            /* Gray-800 */
+            font-size: 1rem;
+            /* 16px */
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            /* Space between icon and text */
+            border-radius: 0.25rem;
+            /* Slight rounding for active link */
+        }
+
+        .nav-link:hover {
+            color: #2563eb;
+            /* Blue-600 on hover */
+            text-decoration: underline;
+        }
+
+        /* Active link styling */
+        .nav-link.active {
+            background-color: #000000;
+            /* Black background */
+            color: #ffffff;
+            /* White text */
+        }
+
+        .nav-link.active:hover {
+            color: #ffffff;
+            /* Keep white on hover */
+            text-decoration: none;
+            /* Remove underline on hover for active link */
+        }
+
+        /* Ensure icons in nav links match text color */
+        .nav-link i {
+            color: inherit;
+            /* Inherit color from parent (nav-link) */
+        }
+
+        /* Adjust header text colors to contrast with white background */
+        header h1 {
+            color: #1f2937;
+            /* Gray-800 */
+        }
+
+        header p {
+            color: #6b7280;
+            /* Gray-500 */
+        }
+
+        header .user-text {
+            color: #1f2937;
+            /* Gray-800 */
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 font-sans">
+
+    <!-- Include the header using an iframe -->
+    <iframe src="../pages/TB_Dash_Header.html" title="Header" id="header-iframe"></iframe>
+
+    <!-- Main Container -->
+    <div class="max-w-7xl mx-auto p-4 space-y-6">
+        <!-- Header -->
+        <div class="bg-gradient-green-blue text-white p-6 rounded-lg">
+            <h1 class="text-3xl font-bold mb-2">Uttarakhand TB Patient Monitoring Dashboard</h1>
+            <p class="text-green-100">Diagnostic services and patient registration tracking in Uttarakhand</p>
+        </div>
+
+        <!-- Top Summary Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Program Summary -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-6">
+                    <h2 class="text-lg font-bold text-green-600 mb-3">Program Summary</h2>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Patients Registered</span>
+                            <span class="font-bold text-green-600">2,490</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Under Treatment</span>
+                            <span class="font-bold text-blue-600">2,304</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Completed Treatment</span>
+                            <span class="font-bold text-purple-600">1,788</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Diagnostics Summary -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-6">
+                    <h2 class="text-lg font-bold text-blue-600 mb-3">Diagnostics Summary</h2>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Sputum Tests</span>
+                            <span class="font-bold text-green-600">1,900</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">CB-NAAT Tests</span>
+                            <span class="font-bold text-blue-600">700</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">X-rays</span>
+                            <span class="font-bold text-purple-600">560</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Monitoring Activity -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-6">
+                    <h2 class="text-lg font-bold text-purple-600 mb-3">Monitoring Activity</h2>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Field Visits</span>
+                            <span class="font-bold text-green-600">378</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Escalations</span>
+                            <span class="font-bold text-red-600">15</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-600">Teleconsultations</span>
+                            <span class="font-bold text-blue-600">198</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Monthly New TB Case Registration -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-6">
+                    <h2 class="text-xl font-bold">Monthly New TB Case Registration</h2>
+                    <p class="text-sm text-gray-600 mb-4">New patient registrations by district in Uttarakhand</p>
+                    <div class="chart-container">
+                        <canvas id="monthlyRegistrationChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <!-- Treatment Status Distribution -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-6">
+                    <h2 class="text-xl font-bold">Treatment Status Distribution</h2>
+                    <p class="text-sm text-gray-600 mb-4">Current patient treatment status breakdown in Uttarakhand</p>
+                    <div class="chart-container">
+                        <canvas id="treatmentStatusChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- District-wise Patient Registration Data Table -->
+        <div class="bg-white rounded-lg shadow">
+            <div class="p-6">
+                <h2 class="text-xl font-bold">District-wise Patient Registration Data</h2>
+                <p class="text-sm text-gray-600 mb-4">Patient registration and treatment status by district in Uttarakhand</p>
+                <div class="overflow-x-auto">
+                    <table class="w-full border-collapse border border-gray-300">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="border border-gray-300 px-4 py-2 text-left">District</th>
+                                <th class="border border-gray-300 px-4 py-2 text-left">Patients Registered</th>
+                                <th class="border border-gray-300 px-4 py-2 text-left">Treatment Status</th>
+                                <th class="border border-gray-300 px-4 py-2 text-left">Last Follow-up</th>
+                                <th class="border border-gray-300 px-4 py-2 text-left">Patient ID</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border border-gray-300 px-4 py-2 font-medium">Dehradun</td>
+                                <td class="border border-gray-300 px-4 py-2">500</td>
+                                <td class="border border-gray-300 px-4 py-2">
+                                    <span
+                                        class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">ACTIVE</span>
+                                </td>
+                                <td class="border border-gray-300 px-4 py-2">May 5, 2025</td>
+                                <td class="border border-gray-300 px-4 py-2 font-mono text-sm">TB-UK001</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border border-gray-300 px-4 py-2 font-medium">Haridwar</td>
+                                <td class="border border-gray-300 px-4 py-2">425</td>
+                                <td class="border border-gray-300 px-4 py-2">
+                                    <span
+                                        class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">COMPLETED</span>
+                                </td>
+                                <td class="border border-gray-300 px-4 py-2">Apr 21, 2025</td>
+                                <td class="border border-gray-300 px-4 py-2 font-mono text-sm">TB-UK002</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border border-gray-300 px-4 py-2 font-medium">Nainital</td>
+                                <td class="border border-gray-300 px-4 py-2">360</td>
+                                <td class="border border-gray-300 px-4 py-2">
+                                    <span
+                                        class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">ACTIVE</span>
+                                </td>
+                                <td class="border border-gray-300 px-4 py-2">May 3, 2025</td>
+                                <td class="border border-gray-300 px-4 py-2 font-mono text-sm">TB-UK003</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border border-gray-300 px-4 py-2 font-medium">Almora</td>
+                                <td class="border border-gray-300 px-4 py-2">340</td>
+                                <td class="border border-gray-300 px-4 py-2">
+                                    <span
+                                        class="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">ACTIVE</span>
+                                </td>
+                                <td class="border border-gray-300 px-4 py-2">May 1, 2025</td>
+                                <td class="border border-gray-300 px-4 py-2 font-mono text-sm">TB-UK004</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border border-gray-300 px-4 py-2 font-medium">Udham Singh Nagar</td>
+                                <td class="border border-gray-300 px-4 py-2">295</td>
+                                <td class="border border-gray-300 px-4 py-2">
+                                    <span
+                                        class="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">COMPLETED</span>
+                                </td>
+                                <td class="border border-gray-300 px-4 py-2">Apr 28, 2025</td>
+                                <td class="border border-gray-300 px-4 py-2 font-mono text-sm">TB-UK005</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Personnel Task Distribution Table -->
+        <div class="bg-white rounded-lg shadow">
+            <div class="p-6">
+                <h2 class="text-xl font-bold">Personnel Task Distribution</h2>
+                <p class="text-sm text-gray-600 mb-4">Healthcare staff roles and task assignments in Uttarakhand</p>
+                <div class="overflow-x-auto">
+                    <table class="w-full border-collapse border border-gray-300">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="border border-gray-300 px-4 py-2 text-left">S.No</th>
+                                <th class="border border-gray-300 px-4 py-2 text-left">Personnel Role</th>
+                                <th class="border border-gray-300 px-4 py-2 text-left">Task Type</th>
+                                <th class="border border-gray-300 px-4 py-2 text-left">Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border border-gray-300 px-4 py-2">1</td>
+                                <td class="border border-gray-300 px-4 py-2 font-medium">Medical Officer</td>
+                                <td class="border border-gray-300 px-4 py-2">Diagnosis Review</td>
+                                <td class="border border-gray-300 px-4 py-2 font-bold text-blue-600">10</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border border-gray-300 px-4 py-2">2</td>
+                                <td class="border border-gray-300 px-4 py-2 font-medium">Field Worker</td>
+                                <td class="border border-gray-300 px-4 py-2">Home Visit</td>
+                                <td class="border border-gray-300 px-4 py-2 font-bold text-blue-600">40</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border border-gray-300 px-4 py-2">3</td>
+                                <td class="border border-gray-300 px-4 py-2 font-medium">Lab Technician</td>
+                                <td class="border border-gray-300 px-4 py-2">Test Upload</td>
+                                <td class="border border-gray-300 px-4 py-2 font-bold text-blue-600">20</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border border-gray-300 px-4 py-2">4</td>
+                                <td class="border border-gray-300 px-4 py-2 font-medium">Program Manager</td>
+                                <td class="border border-gray-300 px-4 py-2">Escalation Review</td>
+                                <td class="border border-gray-300 px-4 py-2 font-bold text-blue-600">2</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <iframe src="../pages/TB_Dash_Footer.html" frameborder="0" style="height: 110px;overflow: auto;"></iframe>
+    </div>
+
+    <!-- JavaScript to Render Charts -->
+    <script>
+        // Data from React Component
+        const monthlyData = [
+            { month: 'JAN', Dehradun: 50, Haridwar: 40, Nainital: 36 },
+            { month: 'FEB', Dehradun: 56, Haridwar: 44, Nainital: 38 },
+            { month: 'MAR', Dehradun: 60, Haridwar: 48, Nainital: 42 },
+            { month: 'APR', Dehradun: 58, Haridwar: 46, Nainital: 40 },
+            { month: 'MAY', Dehradun: 64, Haridwar: 52, Nainital: 44 },
+            { month: 'JUN', Dehradun: 68, Haridwar: 56, Nainital: 48 },
+            { month: 'JUL', Dehradun: 66, Haridwar: 54, Nainital: 46 },
+            { month: 'AUG', Dehradun: 70, Haridwar: 58, Nainital: 50 }
+        ];
+
+        const treatmentStatus = [
+            { name: 'Active Treatment', value: 50, color: '#3B82F6' },
+            { name: 'Cured', value: 30, color: '#10B981' },
+            { name: 'Dropped Out', value: 20, color: '#EF4444' }
+        ];
+
+        // Monthly New TB Case Registration (Bar Chart)
+        new Chart(document.getElementById('monthlyRegistrationChart'), {
+            type: 'bar',
+            data: {
+                labels: monthlyData.map(item => item.month),
+                datasets: [
+                    {
+                        label: 'Dehradun',
+                        data: monthlyData.map(item => item.Dehradun),
+                        backgroundColor: '#3B82F6',
+                        borderColor: '#3B82F6',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Haridwar',
+                        data: monthlyData.map(item => item.Haridwar),
+                        backgroundColor: '#10B981',
+                        borderColor: '#10B981',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Nainital',
+                        data: monthlyData.map(item => item.Nainital),
+                        backgroundColor: '#8B5CF6',
+                        borderColor: '#8B5CF6',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        ticks: { font: { size: 12 } }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        max: 80,
+                        ticks: { stepSize: 20 }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // Treatment Status Distribution (Pie Chart)
+        new Chart(document.getElementById('treatmentStatusChart'), {
+            type: 'pie',
+            data: {
+                labels: treatmentStatus.map(item => item.name),
+                datasets: [{
+                    data: treatmentStatus.map(item => item.value),
+                    backgroundColor: treatmentStatus.map(item => item.color),
+                    borderColor: treatmentStatus.map(item => item.color),
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom' },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                return `${context.label}: ${context.raw}%`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

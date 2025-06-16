@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uttarakhand TB Monitoring Portal</title>
+    <meta name="keywords" content="TB Monitoring, Uttarakhand Health, Patient Tracking">
+    <meta name="description" content="Official portal for monitoring TB patients in Uttarakhand">
+
+    <!-- Favicon -->
+    <link rel="icon" href="img/favicon.ico">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/tempusdominus/css/tempusdominus-bootstrap-4.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Stylesheet -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom Stylesheet -->
+    <style>
+        :root {
+            --primary: #0052CC;
+            /* Jio-inspired vibrant blue */
+            --secondary: #FF3D00;
+            /* Hotstar/Jio-inspired red-orange */
+            --dark: #1A2526;
+            /* Sleek dark teal-gray */
+            --light: #F5F7FA;
+            /* Clean light gray */
+            --gradient: linear-gradient(90deg, var(--primary) 0%, var(--secondary) 100%);
+            --success: #28A745;
+            /* Green for success */
+            --warning: #FFC107;
+            /* Yellow for warnings */
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+
+        /* Spinner */
+        #spinner {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease-out, visibility 0s linear 0.5s;
+            z-index: 99999;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        #spinner.show {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .spinner-grow {
+            background: var(--primary);
+        }
+
+        /* Buttons */
+        .btn {
+            font-weight: 600;
+            text-transform: uppercase;
+            border-radius: 8px;
+            padding: 12px 30px;
+            transition: all 0.3s ease;
+            -webkit-transition: all 0.3s ease;
+            -moz-transition: all 0.3s ease;
+        }
+
+        .signup-btn {
+            background: var(--gradient);
+            color: #fff;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0, 82, 204, 0.3);
+        }
+
+        .signup-btn:hover,
+        .signup-btn:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 82, 204, 0.5);
+            background: var(--primary);
+        }
+
+        .patient-btn {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(26, 37, 38, 0.2);
+        }
+
+        .patient-btn:hover,
+        .patient-btn:focus {
+            transform: translateY(-2px);
+            background: var(--secondary);
+            box-shadow: 0 6px 16px rgba(255, 61, 0, 0.4);
+        }
+
+        /* Header Section */
+        .maninCarouselBody {
+            background: var(--gradient);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mainHEADER {
+            color: var(--dark);
+            font-weight: 700;
+            font-size: 2.5rem;
+        }
+
+        .dashboard-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            transition: transform 0.5s ease;
+            -webkit-transition: transform 0.5s ease;
+            -moz-transition: transform 0.5s ease;
+        }
+
+        .dashboard-image:hover {
+            transform: scale(1.05);
+        }
+
+        .button-container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .border-stat {
+            border-left: 4px solid var(--secondary);
+            padding-left: 15px;
+        }
+
+        /* Service Section */
+        .service-card {
+            background: var(--light);
+            border-radius: 12px;
+            padding: 16px;
+            /* border: 1px solid rgba(0, 0, 0, 0.05); */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            -webkit-transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            -moz-transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            min-height: 280px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            border-left: 5px solid var(--primary);
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            background: var(--gradient);
+            border: none;
+        }
+
+        .service-card:hover h4,
+        .service-card:hover p,
+        .service-card:hover i {
+            color: #fff;
+        }
+
+        .service-card i {
+            font-size: 1.5rem;
+            color: var(--light);
+            align-self: self-start;
+            margin-bottom: 8px;
+           background: var(--gradient);
+           width: 50px;
+           height: 50px;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           border-radius: 50px;
+        }
+
+        .service-card h4 {
+            font-size: 1.25rem;
+            color: var(--dark);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .service-card p {
+            color: var(--dark);
+            font-size: 0.875rem;
+            line-height: 1.5;
+            margin-bottom: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .service-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        /* Feature Section */
+        .FooterDivisionUp {
+            background: var(--dark);
+            padding: 30px 15px;
+        }
+
+        .feature-text h1 {
+            font-weight: 700;
+            color: var(--light);
+        }
+
+        .feature-text p {
+            color: var(--light);
+            font-size: 1rem;
+        }
+
+        .feature-image-container {
+            /* background: linear-gradient(145deg, #FFFFFF, #F0F0F0); */
+            /* Mirror-like white gradient */
+            padding: 20px;
+            border-radius: 12px;
+            /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), inset 0 0 8px rgba(255, 255, 255, 0.5); */
+            /* Enhanced mirror effect */
+        }
+
+        .feature-image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            transition: transform 0.5s ease;
+            -webkit-transition: transform 0.5s ease;
+            -moz-transition: transform 0.5s ease;
+        }
+
+        .feature-image-container img:hover {
+            transform: scale(1.02);
+        }
+
+        .feature-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feature-circle i {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+
+        .feature-item h5 {
+            font-size: 1rem;
+            color: var(--light);
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: var(--light);
+            padding: 20px 15px;
+            font-size: 0.875rem;
+        }
+
+        footer a {
+            color: var(--secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+            -webkit-transition: color 0.3s;
+            -moz-transition: color 0.3s;
+        }
+
+        footer a:hover {
+            color: var(--warning);
+        }
+
+        /* Accessibility */
+        .btn:focus-visible,
+        a:focus-visible {
+            outline: 3px solid var(--secondary);
+            outline-offset: 2px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .mainHEADER {
+                font-size: 1.8rem;
+            }
+
+            .maninCarouselBody {
+                min-height: 80vh;
+                flex-direction: column;
+                padding: 15px;
+            }
+
+            .button-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .signup-btn,
+            .patient-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .dashboard-image {
+                padding: 10px;
+            }
+
+            .service-card {
+                margin-bottom: 20px;
+                height: 280px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mainHEADER {
+                font-size: 1.5rem;
+            }
+
+            .dashboard-image {
+                padding: 8px;
+            }
+
+            .service-card h4 {
+                font-size: 1.2rem;
+            }
+
+            .service-card p {
+                font-size: 0.8rem;
+            }
+
+            .service-card {
+                height: 260px;
+            }
+
+            .feature-circle {
+                width: 40px;
+                height: 40px;
+            }
+
+            .feature-circle i {
+                font-size: 1.2rem;
+            }
+
+            .feature-item h5 {
+                font-size: 0.875rem;
+            }
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            display: none;
+            background: var(--secondary);
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            z-index: 99;
+            transition: background 0.3s, transform 0.3s;
+            -webkit-transition: background 0.3s, transform 0.3s;
+            -moz-transition: background 0.3s, transform 0.3s;
+        }
+
+        .back-to-top.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-to-top:hover {
+            background: var(--primary);
+            transform: translateY(-5px);
+            color: var(--light);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Spinner Start -->
+    <div id="spinner"
+        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-grow" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+
+    <!-- Header Section -->
+    <header class="container-fluid header mb-5 maninCarouselBody" aria-labelledby="header-heading">
+        <div class="container">
+            <div class="row g-0 align-items-center flex-column-reverse flex-lg-row">
+                <div class="col-lg-6 p-4">
+                    <h1 id="header-heading" class="display-4 text-white mb-4">Uttarakhand TB Monitoring Portal</h1>
+                    <p class="text-white mb-4 lead">Real-time tracking and management of TB patients across Uttarakhand.
+                    </p>
+                    <div class="button-container">
+                        <a href="/pages/LoginSignup.html" class="btn signup-btn" role="button"
+                            aria-label="Sign in to the portal">Sign In</a>
+                        <a href="/pages/License.html" class="btn patient-btn" role="button"
+                            aria-label="Register a new TB patient"><i class="bi bi-plus"></i> New Patient</a>
+                    </div>
+                    <div class="row g-4 mt-4">
+                        <div class="col-sm-4">
+                            <div class="border-stat ps-3">
+                                <h4 class="text-white">New Registrations</h4>
+                                <h2 class="text-white mb-1" data-toggle="counter-up"
+                                    aria-label="809 new registrations this month">809</h2>
+                                <p class="text-white mb-0">Monthly</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="border-stat ps-3">
+                                <h4 class="text-white">Diagnostics Conducted</h4>
+                                <h2 class="text-white mb-1" data-toggle="counter-up"
+                                    aria-label="18,734 diagnostics conducted this year">18,734</h2>
+                                <p class="text-white mb-0">Year</p>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="border-stat ps-3">
+                                <h4 class="text-white">Treatment Initiated</h4>
+                                <h2 class="text-white mb-1" data-toggle="counter-up"
+                                    aria-label="19,894 treatments initiated over three years">19,894</h2>
+                                <p class="text-white mb-0">3 Years</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 p-4">
+                    <div class="dashboard-image-container">
+                        <img class="dashboard-image"
+                            src="https://png.pngtree.com/png-clipart/20230930/original/pngtree-3d-web-report-dashboard-monitor-concept-png-file-3d-rendering-png-image_13024424.png"
+                            alt="Interactive TB monitoring dashboard showing patient statistics">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Service Section -->
+    <section class="container py-5" aria-labelledby="services-heading">
+        <div class="text-center mb-5">
+            <h2 id="services-heading" class="mainHEADER">TB Patient Monitoring Services</h2>
+            <p class="text-muted">Comprehensive tools for TB patient management and analytics.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="service-card p-4">
+                    <i class="fas fa-chart-bar"></i>
+                    <div class="service-content">
+                        <h4>Program Analytics</h4>
+                        <p>Registrations Today: 0</p>
+                        <p>Total Patients: 29,900</p>
+                        <p>Treatments Started: 7,53,657</p>
+                        <p>Portal Visits: 1,57,58,251</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="service-card p-4">
+                    <i class="fas fa-bullhorn"></i>
+                    <div class="service-content">
+                        <h4>Program Updates</h4>
+                        <p>Latest Circular: Revised TB Guidelines 2024</p>
+                        <p>Integration: Nikshay + ABHA</p>
+                        <p>e-Treatment Adherence Platform Active</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="service-card p-4">
+                    <i class="fas fa-user-plus"></i>
+                    <div class="service-content">
+                        <h4>Patient & Facility Services</h4>
+                        <p>Register New TB Patient</p>
+                        <p>Verify Facility or Lab</p>
+                        <p>Access Treatment Records</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="service-card p-4">
+                    <i class="fas fa-book"></i>
+                    <div class="service-content">
+                        <h4>TB Resources</h4>
+                        <p>About the TB Mission</p>
+                        <p>National TB Control Guidelines</p>
+                        <p>Report Facility Issues</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="service-card p-4">
+                    <i class="fas fa-file-alt"></i>
+                    <div class="service-content">
+                        <h4>Guidelines & SOPs</h4>
+                        <p>DOTS Center SOPs</p>
+                        <p>Facility Onboarding Checklist</p>
+                        <p>Consent Forms</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="service-card p-4">
+                    <i class="fas fa-phone-alt"></i>
+                    <div class="service-content">
+                        <h4>Contact Us</h4>
+                        <p>State TB Office, Dehradun</p>
+                        <p>Helpline: 104 / 1800-11-TB-TREAT</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feature Section -->
+    <section class="container-fluid FooterDivisionUp py-5" aria-labelledby="feature-heading">
+        <div class="container">
+            <div class="row g-0 align-items-center">
+                <div class="col-lg-6 feature-text py-4">
+                    <h1 id="feature-heading" class="text-white mb-4">TB Monitoring System</h1>
+                    <p class="text-white mb-4">Timely and transparent tracking of TB diagnosis and treatment across
+                        Uttarakhand.</p>
+                    <div class="row g-4">
+                        <div class="col-6">
+                            <div class="feature-item">
+                                <div class="feature-circle">
+                                    <i class="fas fa-user-plus"></i>
+                                </div>
+                                <div class="ms-2">
+                                    <h5 class="mb-1">Easy</h5>
+                                    <h5>Registration</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="feature-item">
+                                <div class="feature-circle">
+                                    <i class="fas fa-stethoscope"></i>
+                                </div>
+                                <div class="ms-2">
+                                    <h5 class="mb-1">Accurate</h5>
+                                    <h5>Diagnostics</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="feature-item">
+                                <div class="feature-circle">
+                                    <i class="fas fa-headset"></i>
+                                </div>
+                                <div class="ms-2">
+                                    <h5 class="mb-1">24x7</h5>
+                                    <h5>Support</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="feature-item">
+                                <div class="feature-circle">
+                                    <i class="fas fa-user-md"></i>
+                                </div>
+                                <div class="ms-2">
+                                    <h5 class="mb-1">Health Worker</h5>
+                                    <h5>Support</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="feature-image-container">
+                        <img src="https://img.freepik.com/premium-vector/uttarakhand-3d-district-map-is-state-india_667085-275.jpg"
+                            alt="Administrative map of Uttarakhand">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center py-4">
+        <p>© 2025 Uttarakhand TB Health Mission | Powered by <a href="https://uniquehire.co.in/" target="_blank"
+                aria-label="Visit UniqueHire website">UniqueHire</a>. All rights reserved.</p>
+    </footer>
+
+    <!-- Back to Top -->
+    <a href="#" class="back-to-top" aria-label="Back to top"><i class="bi bi-arrow-up"></i></a>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/counterup/counterup.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/tempusdominus/js/moment.min.js"></script>
+    <script src="lib/tempusdominus/js/moment-timezone.min.js"></script>
+    <script src="lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script>
+        // Show/hide back-to-top button on scroll
+        $(window).scroll(function () {
+            if ($(this).scrollTop() > 200) {
+                $('.back-to-top').addClass('show');
+            } else {
+                $('.back-to-top').removeClass('show');
+            }
+        });
+    </script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

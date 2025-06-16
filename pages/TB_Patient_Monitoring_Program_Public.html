@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uttarakhand TB Patient Monitoring Program Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom gradient for header */
+        .bg-gradient-green-teal {
+            background: linear-gradient(to right, #16a34a, #0d9488);
+        }
+
+        /* Ensure the iframe has no border and fits seamlessly */
+        iframe {
+            border: none;
+            width: 100%;
+            height: 200px;
+            /* Adjust height to fit the header content */
+            display: block;
+        }
+
+        /* Ensure table is scrollable on mobile */
+        @media (max-width: 768px) {
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
+
+        /* Style for select element to match the component */
+        select {
+            background-color: #ffffff;
+            border: 1px solid #d1d5db;
+            color: #000000;
+            padding: 0 12px;
+            /* Adjusted padding to match div */
+            border-radius: 4px;
+            width: 100%;
+            height: 40px;
+            /* Fixed height to match div */
+            box-sizing: border-box;
+            /* Ensure padding doesn't affect height */
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+            background-repeat: no-repeat;
+            background-position-x: 98%;
+            background-position-y: 50%;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #2563eb;
+        }
+
+        /* Ensure div elements for State and Program Focus have the same height */
+        .field-box {
+            height: 40px;
+            /* Fixed height to match select */
+            box-sizing: border-box;
+            /* Ensure padding doesn't affect height */
+            display: flex;
+            align-items: center;
+            /* Vertically center text */
+        }
+
+        /* Ensure the body can scroll vertically and horizontally */
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            overflow-x: auto;
+            /* Allow horizontal scrolling at the page level */
+            overflow-y: auto;
+            /* Allow vertical scrolling at the page level */
+            height: auto;
+            width: auto;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        /* Icon styling for user and logout */
+        .header-icon {
+            font-size: 1.25rem;
+            /* 20px */
+            color: #1f2937;
+            /* Gray-800, same as nav links */
+            opacity: 0.9;
+            transition: opacity 0.2s;
+        }
+
+        .header-icon:hover {
+            opacity: 1;
+        }
+
+        /* Navigation link styling */
+        .nav-link {
+            color: #1f2937;
+            /* Gray-800 */
+            font-size: 1rem;
+            /* 16px */
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            /* Space between icon and text */
+            border-radius: 0.25rem;
+            /* Slight rounding for active link */
+        }
+
+        .nav-link:hover {
+            color: #2563eb;
+            /* Blue-600 on hover */
+            text-decoration: underline;
+        }
+
+        /* Active link styling */
+        .nav-link.active {
+            background-color: #000000;
+            /* Black background */
+            color: #ffffff;
+            /* White text */
+        }
+
+        .nav-link.active:hover {
+            color: #ffffff;
+            /* Keep white on hover */
+            text-decoration: none;
+            /* Remove underline on hover for active link */
+        }
+
+        /* Ensure icons in nav links match text color */
+        .nav-link i {
+            color: inherit;
+            /* Inherit color from parent (nav-link) */
+        }
+
+        /* Adjust header text colors to contrast with white background */
+        header h1 {
+            color: #1f2937;
+            /* Gray-800 */
+        }
+
+        header p {
+            color: #6b7280;
+            /* Gray-500 */
+        }
+
+        header .user-text {
+            color: #1f2937;
+            /* Gray-800 */
+        }
+
+        /* Spinner overlay */
+        .spinner-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid transparent;
+            border-image: conic-gradient(#0078FF, #FF007A, #0078FF) 1;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 font-sans">
+
+    <!-- Spinner overlay -->
+    <div class="spinner-overlay" id="spinnerOverlay">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Include the header using an iframe -->
+    <iframe src="../pages/TB_Dash_Header.html" title="Header" id="header-iframe"></iframe>
+
+    <!-- Main Container -->
+    <div class="max-w-7xl mx-auto p-4 space-y-6">
+        <!-- Header -->
+        <div class="bg-gradient-green-teal text-white p-6 rounded-lg">
+            <h1 class="text-3xl font-bold mb-2">Uttarakhand TB Patient Monitoring Program Dashboard</h1>
+            <p class="text-green-100">Public health analytics and program transparency in Uttarakhand</p>
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-green-100 mb-2">State</label>
+                    <div class="bg-white/20 rounded px-3 field-box text-white font-medium">Uttarakhand</div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-green-100 mb-2">Year Range</label>
+                    <select id="yearRange" class="border-gray-300 text-black ps-3">
+                        <option value="2024-2025" selected>2024-2025</option>
+                        <option value="2023-2024">2023-2024</option>
+                        <option value="2022-2023">2022-2023</option>
+                        <option value="2021-2022">2021-2022</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-green-100 mb-2">Program Focus</label>
+                    <div class="bg-white/20 rounded px-3 field-box text-white font-medium">TB Monitoring</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Program Focus Areas -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4" id="programFocusAreas">
+            <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-lg">
+                <div class="p-6 text-center">
+                    <div class="text-2xl font-bold" id="totalPatients">2,490</div>
+                    <div class="text-sm opacity-90">Total Registered TB Patients</div>
+                </div>
+            </div>
+            <div class="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-lg">
+                <div class="p-6 text-center">
+                    <div class="text-2xl font-bold" id="underTreatment">2,304</div>
+                    <div class="text-sm opacity-90">Patients Under Treatment</div>
+                </div>
+            </div>
+            <div class="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-lg">
+                <div class="p-6 text-center">
+                    <div class="text-2xl font-bold" id="treatmentCompleted">1,896</div>
+                    <div class="text-sm opacity-90">Treatment Completed</div>
+                </div>
+            </div>
+            <div class="bg-gradient-to-br from-red-500 to-red-600 text-white rounded-lg">
+                <div class="p-6 text-center">
+                    <div class="text-2xl font-bold" id="droppedOut">86</div>
+                    <div class="text-sm opacity-90">Patients Dropped Out</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TB Patient Monitoring Applications Table -->
+        <div class="bg-white rounded-lg shadow">
+            <div class="p-6">
+                <h2 class="text-xl font-bold">TB Patient Monitoring Applications</h2>
+                <p class="text-sm text-gray-600 mb-4">Service delivery metrics and processing times for TB program services in Uttarakhand</p>
+                <div class="overflow-x-auto">
+                    <table class="w-full border-collapse border border-gray-300 text-sm" id="applicationsTable">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="border border-gray-300 px-3 py-2 text-left">S. No</th>
+                                <th class="border border-gray-300 px-3 py-2 text-left">Service Type</th>
+                                <th class="border border-gray-300 px-3 py-2 text-left">Time Limit (Weeks)</th>
+                                <th class="border border-gray-300 px-3 py-2 text-left">Total Applications Received</th>
+                                <th class="border border-gray-300 px-3 py-2 text-left">Total Applications Approved</th>
+                                <th class="border border-gray-300 px-3 py-2 text-left">Total Applications Rejected</th>
+                                <th class="border border-gray-300 px-3 py-2 text-left">Min Time Taken (Weeks)</th>
+                                <th class="border border-gray-300 px-3 py-2 text-left">Avg Time Taken (Weeks)</th>
+                                <th class="border border-gray-300 px-3 py-2 text-left">Max Time Taken (Weeks)</th>
+                                <th class="border border-gray-300 px-3 py-2 text-left">Median Time Taken (Weeks)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border border-gray-300 px-3 py-2">1</td>
+                                <td class="border border-gray-300 px-3 py-2 font-medium">Patient Registration</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">2</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">100</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center text-green-600 font-medium">90</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center text-red-600 font-medium">10</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">1</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center font-medium text-blue-600">3</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">6</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">4</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border border-gray-300 px-3 py-2">2</td>
+                                <td class="border border-gray-300 px-3 py-2 font-medium">Treatment Initiation</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">3</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">96</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center text-green-600 font-medium">90</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center text-red-600 font-medium">6</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">2</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center font-medium text-blue-600">4</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">7</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">5</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border border-gray-300 px-3 py-2">3</td>
+                                <td class="border border-gray-300 px-3 py-2 font-medium">Diagnostic Test Approval</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">1</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">80</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center text-green-600 font-medium">76</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center text-red-600 font-medium">4</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">1</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center font-medium text-blue-600">2</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">5</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">3</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border border-gray-300 px-3 py-2">4</td>
+                                <td class="border border-gray-300 px-3 py-2 font-medium">Medication Regimen Approval</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">2</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">92</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center text-green-600 font-medium">88</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center text-red-600 font-medium">4</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">1</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center font-medium text-blue-600">3</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">6</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">4</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border border-gray-300 px-3 py-2">5</td>
+                                <td class="border border-gray-300 px-3 py-2 font-medium">Patient Adherence Monitoring</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">2</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">90</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center text-green-600 font-medium">86</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center text-red-600 font-medium">4</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">1</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center font-medium text-blue-600">3</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">6</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">4</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="border border-gray-300 px-3 py-2">6</td>
+                                <td class="border border-gray-300 px-3 py-2 font-medium">Treatment Completion Verification</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">3</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">94</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center text-green-600 font-medium">90</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center text-red-600 font-medium">4</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">2</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center font-medium text-blue-600">4</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">7</td>
+                                <td class="border border-gray-300 px-3 py-2 text-center">5</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Patient Treatment Timeliness Analysis -->
+        <div class="bg-white rounded-lg shadow">
+            <div class="p-6">
+                <h2 class="text-xl font-bold">Patient Treatment Timeliness Analysis</h2>
+                <p class="text-sm text-gray-600 mb-4">Time analysis for key TB program processes in Uttarakhand</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-blue-50 p-6 rounded-lg">
+                        <h3 class="font-bold text-blue-800 mb-2">Minimum Time for Patient Registration</h3>
+                        <div class="text-3xl font-bold text-blue-600">1 Week</div>
+                        <p class="text-sm text-blue-600 mt-2">Fastest registration process</p>
+                    </div>
+                    <div class="bg-green-50 p-6 rounded-lg">
+                        <h3 class="font-bold text-green-800 mb-2">Average Time for Diagnostic Approval</h3>
+                        <div class="text-3xl font-bold text-green-600">2 Weeks</div>
+                        <p class="text-sm text-green-600 mt-2">Standard processing time</p>
+                    </div>
+                    <div class="bg-purple-50 p-6 rounded-lg">
+                        <h3 class="font-bold text-purple-800 mb-2">Maximum Time for Treatment Verification</h3>
+                        <div class="text-3xl font-bold text-purple-600">7 Weeks</div>
+                        <p class="text-sm text-purple-600 mt-2">Longest verification time</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Statistics -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Service Efficiency Metrics -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-6">
+                    <h2 class="text-xl font-bold">Service Efficiency Metrics</h2>
+                    <p class="text-sm text-gray-600 mb-4">Overall program performance indicators in Uttarakhand</p>
+                    <div class="space-y-4" id="efficiencyMetrics">
+                        <div class="flex justify-between items-center p-3 bg-green-50 rounded">
+                            <span class="font-medium">Average Approval Rate</span>
+                            <span class="text-2xl font-bold text-green-600">92.8%</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-blue-50 rounded">
+                            <span class="font-medium">Average Processing Time</span>
+                            <span class="text-2xl font-bold text-blue-600">3.2 Weeks</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-purple-50 rounded">
+                            <span class="font-medium">Total Applications Processed</span>
+                            <span class="text-2xl font-bold text-purple-600">552</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Program Transparency -->
+            <div class="bg-white rounded-lg shadow">
+                <div class="p-6">
+                    <h2 class="text-xl font-bold">Program Transparency</h2>
+                    <p class="text-sm text-gray-600 mb-4">Public accountability measures in Uttarakhand</p>
+                    <div class="space-y-4">
+                        <div class="p-4 border border-gray-200 rounded">
+                            <h4 class="font-bold text-gray-800 mb-2">Data Reporting Frequency</h4>
+                            <p class="text-sm text-gray-600">Updated daily at 6:00 AM IST</p>
+                        </div>
+                        <div class="p-4 border border-gray-200 rounded">
+                            <h4 class="font-bold text-gray-800 mb-2">Grievance Redressal</h4>
+                            <p class="text-sm text-gray-600">24/7 helpline: 1800-TB-HELP</p>
+                        </div>
+                        <div class="p-4 border border-gray-200 rounded">
+                            <h4 class="font-bold text-gray-800 mb-2">Data Accuracy</h4>
+                            <p class="text-sm text-gray-600">Verified through multiple sources</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <iframe src="../pages/TB_Dash_Footer.html" frameborder="0" style="height: 110px;overflow: auto;"></iframe>
+    </div>
+
+    <!-- JavaScript for Year Range Functionality -->
+    <script>
+        // Year range datasets for Uttarakhand
+        const yearData = {
+            '2024-2025': {
+                totalPatients: 2490,
+                underTreatment: 2304,
+                treatmentCompleted: 1896,
+                droppedOut: 86,
+                applications: [
+                    { received: 100, approved: 90, rejected: 10 },
+                    { received: 96, approved: 90, rejected: 6 },
+                    { received: 80, approved: 76, rejected: 4 },
+                    { received: 92, approved: 88, rejected: 4 },
+                    { received: 90, approved: 86, rejected: 4 },
+                    { received: 94, approved: 90, rejected: 4 }
+                ],
+                efficiency: {
+                    approvalRate: '92.8%',
+                    processingTime: '3.2 Weeks',
+                    totalProcessed: 552
+                }
+            },
+            '2023-2024': {
+                totalPatients: 2400,
+                underTreatment: 2220,
+                treatmentCompleted: 1824,
+                droppedOut: 83,
+                applications: [
+                    { received: 96, approved: 86, rejected: 10 },
+                    { received: 92, approved: 86, rejected: 6 },
+                    { received: 76, approved: 72, rejected: 4 },
+                    { received: 88, approved: 84, rejected: 4 },
+                    { received: 86, approved: 82, rejected: 4 },
+                    { received: 90, approved: 86, rejected: 4 }
+                ],
+                efficiency: {
+                    approvalRate: '92.5%',
+                    processingTime: '3.3 Weeks',
+                    totalProcessed: 532
+                }
+            },
+            '2022-2023': {
+                totalPatients: 2300,
+                underTreatment: 2125,
+                treatmentCompleted: 1748,
+                droppedOut: 80,
+                applications: [
+                    { received: 92, approved: 83, rejected: 9 },
+                    { received: 88, approved: 82, rejected: 6 },
+                    { received: 72, approved: 68, rejected: 4 },
+                    { received: 84, approved: 80, rejected: 4 },
+                    { received: 82, approved: 78, rejected: 4 },
+                    { received: 86, approved: 82, rejected: 4 }
+                ],
+                efficiency: {
+                    approvalRate: '92.2%',
+                    processingTime: '3.4 Weeks',
+                    totalProcessed: 512
+                }
+            },
+            '2021-2022': {
+                totalPatients: 2200,
+                underTreatment: 2035,
+                treatmentCompleted: 1672,
+                droppedOut: 77,
+                applications: [
+                    { received: 88, approved: 79, rejected: 9 },
+                    { received: 84, approved: 78, rejected: 6 },
+                    { received: 68, approved: 64, rejected: 4 },
+                    { received: 80, approved: 76, rejected: 4 },
+                    { received: 78, approved: 74, rejected: 4 },
+                    { received: 82, approved: 78, rejected: 4 }
+                ],
+                efficiency: {
+                    approvalRate: '91.9%',
+                    processingTime: '3.5 Weeks',
+                    totalProcessed: 492
+                }
+            }
+        };
+
+        // DOM elements
+        const yearRangeSelect = document.getElementById('yearRange');
+        const spinnerOverlay = document.getElementById('spinnerOverlay');
+        const totalPatients = document.getElementById('totalPatients');
+        const underTreatment = document.getElementById('underTreatment');
+        const treatmentCompleted = document.getElementById('treatmentCompleted');
+        const droppedOut = document.getElementById('droppedOut');
+        const applicationsTable = document.getElementById('applicationsTable').getElementsByTagName('tbody')[0];
+        const efficiencyMetrics = document.getElementById('efficiencyMetrics').children;
+
+        // Update dashboard data
+        function updateDashboard(yearRange) {
+            const data = yearData[yearRange];
+
+            // Update program focus areas
+            totalPatients.textContent = data.totalPatients.toLocaleString();
+            underTreatment.textContent = data.underTreatment.toLocaleString();
+            treatmentCompleted.textContent = data.treatmentCompleted.toLocaleString();
+            droppedOut.textContent = data.droppedOut.toLocaleString();
+
+            // Update applications table
+            const rows = applicationsTable.getElementsByTagName('tr');
+            data.applications.forEach((app, index) => {
+                rows[index].children[3].textContent = app.received;
+                rows[index].children[4].textContent = app.approved;
+                rows[index].children[5].textContent = app.rejected;
+            });
+
+            // Update efficiency metrics
+            efficiencyMetrics[0].children[1].textContent = data.efficiency.approvalRate;
+            efficiencyMetrics[1].children[1].textContent = data.efficiency.processingTime;
+            efficiencyMetrics[2].children[1].textContent = data.efficiency.totalProcessed.toLocaleString();
+        }
+
+        // Handle year range change
+        yearRangeSelect.addEventListener('change', () => {
+            spinnerOverlay.style.display = 'flex';
+            setTimeout(() => {
+                updateDashboard(yearRangeSelect.value);
+                spinnerOverlay.style.display = 'none';
+            }, 2000);
+        });
+
+        // Initial load
+        updateDashboard('2024-2025');
+    </script>
+</body>
+
+</html>

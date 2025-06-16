@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Header Component</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome CDN for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* Define Jio/Hotstar colors */
+        :root {
+            --primary: #0052CC; /* Jio-inspired vibrant blue */
+            --accent: #FF3D00; /* Hotstar/Jio-inspired red-orange */
+        }
+        /* Explicit font stack */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        /* Icon styling for logout */
+        .logout-icon {
+            font-size: 1rem; /* 16px */
+            color: #ffffff; /* White */
+            background: #ef4444; /* Red-500 */
+            padding: 0.5rem; /* 8px */
+            border-radius: 9999px; /* Full circle */
+            transition: background 0.2s;
+        }
+        .logout-icon:hover {
+            background: #dc2626; /* Red-600 */
+        }
+        /* Hamburger icon styling */
+        .hamburger-icon {
+            font-size: 1.5rem; /* 24px */
+            color: #1f2937; /* Gray-800 */
+            cursor: pointer;
+        }
+        /* Navigation link styling */
+        .nav-link {
+            color: #1f2937; /* Gray-800 */
+            font-size: 1rem; /* 16px */
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem; /* Space between icon and text */
+            border-radius: 0.25rem; /* Slight rounding for active link */
+        }
+        .nav-link:hover {
+            color: #2563eb; /* Blue-600 on hover */
+            text-decoration: underline;
+        }
+        /* Active link styling with Jio/Hotstar gradient */
+        .nav-link.active {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+            color: #ffffff; /* White text */
+        }
+        .nav-link.active:hover {
+            background: linear-gradient(90deg, var(--accent) 0%, var(--primary) 100%);
+            color: #ffffff; /* Keep white on hover */
+            text-decoration: none; /* Remove underline on hover for active link */
+        }
+        /* Ensure icons in nav links match text color */
+        .nav-link i {
+            color: inherit; /* Inherit color from parent (nav-link) */
+        }
+        /* Navigation container styling */
+        .nav-container {
+            display: block;
+        }
+        .nav-container nav {
+            display: none;
+        }
+        .nav-container.nav-open nav {
+            display: block;
+        }
+        /* Mobile nav styling */
+        @media (max-width: 768px) {
+            .nav-container nav {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: #fff;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                padding: 1rem;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease-in-out;
+                z-index: 10;
+            }
+            .nav-container.nav-open nav {
+                transform: translateX(0);
+            }
+            .nav-container nav .nav-link {
+                padding: 0.75rem 1rem;
+            }
+            .mobile-header-info {
+                padding: 1rem;
+                border-bottom: 1px solid #e5e7eb; /* Gray-200 */
+            }
+        }
+        /* Desktop nav styling */
+        @media (min-width: 768px) {
+            .nav-container nav {
+                display: flex !important;
+                flex-direction: row;
+                justify-content: start;
+            }
+        }
+        /* Adjust header text colors to contrast with white background */
+        header h1 {
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: #0052CC; /* Fallback for unsupported browsers */
+        }
+        header p {
+            color: #6b7280; /* Gray-500 */
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+<!-- Header Component -->
+<header class="p-6 rounded-lg relative">
+    <div class="flex justify-between items-center mb-4">
+        <div>
+            <h1 class="text-3xl font-bold mb-2">TB Monitoring System</h1>
+            <p class="text-sm">Uttarakhand Health Department</p>
+            <span class="text-sm" id="welcome-text">Welcome Administrator</span>
+        </div>
+        <div class="flex items-center space-x-3">
+            <a href="../pages/LoginSignup.html?action=logout" class="flex items-center justify-center" target="_parent" id="logout-btn">
+                <i class="fas fa-right-from-bracket logout-icon"></i>
+            </a>
+            <i class="fas fa-bars hamburger-icon md:hidden"></i>
+        </div>
+    </div>
+    <div class="nav-container">
+        <nav class="flex flex-col md:flex-row justify-start space-y-2 md:space-y-0 md:space-x-4">
+            <a href="../pages/National_TB_Patient_Monitoring.html" class="nav-link" target="_parent" data-page="National_TB_Patient_Monitoring">
+                <i class="fas fa-chart-line"></i>
+                Overall
+            </a>
+            <a href="../pages/TB_Patient_Monitoring.html" class="nav-link" target="_parent" data-page="TB_Patient_Monitoring">
+                <i class="fas fa-stethoscope"></i>
+                Diagnostics
+            </a>
+            <a href="../pages/TB_Patient_Surveillance.html" class="nav-link" target="_parent" data-page="TB_Patient_Surveillance">
+                <i class="fas fa-binoculars"></i>
+                Surveillance
+            </a>
+            <a href="../pages/TB_Patient_Monitoring_Program.html" class="nav-link" target="_parent" data-page="TB_Patient_Monitoring_Program">
+                <i class="fas fa-briefcase-medical"></i>
+                Treatment
+            </a>
+            <a href="../pages/TB_Patient_Monitoring_Program_Public.html" class="nav-link" target="_parent" data-page="TB_Patient_Monitoring_Program_Public">
+                <i class="fas fa-users"></i>
+                Public Health
+            </a>
+        </nav>
+    </div>
+</header>
+<script>
+    // Toggle menu functionality
+    const hamburger = document.querySelector('.hamburger-icon');
+    const navContainer = document.querySelector('.nav-container');
+    const logoutBtn = document.querySelector('#logout-btn');
+    const welcomeText = document.querySelector('#welcome-text');
+
+    // Update welcome text based on stored username
+    function updateWelcomeText() {
+        const username = localStorage.getItem('username');
+        welcomeText.textContent = username ? `Welcome ${username}` : 'Welcome Administrator';
+    }
+
+    // Run on page load
+    updateWelcomeText();
+
+    // Handle logout
+    logoutBtn.addEventListener('click', () => {
+        localStorage.removeItem('username');
+    });
+
+    hamburger.addEventListener('click', () => {
+        navContainer.classList.toggle('nav-open');
+        hamburger.classList.toggle('fa-bars');
+        hamburger.classList.toggle('fa-times');
+    });
+
+    // Close menu when clicking a nav link on mobile
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth < 768) {
+                navContainer.classList.remove('nav-open');
+                hamburger.classList.add('fa-bars');
+                hamburger.classList.remove('fa-times');
+            }
+        });
+    });
+
+    // Set active link based on parent page
+    function setActiveLink() {
+        try {
+            // Get parent page's pathname (e.g., "/pages/TB_Patient_Monitoring_Program.html")
+            const parentPath = window.parent.location.pathname;
+            // Extract filename (e.g., "TB_Patient_Monitoring_Program.html")
+            const pageName = parentPath.split('/').pop().replace('.html', '');
+
+            // Find matching nav link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                const linkPage = link.getAttribute('data-page');
+                if (linkPage === pageName) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        } catch (e) {
+            console.warn('Cannot access parent URL, possibly due to cross-origin restrictions:', e);
+            // Fallback: Check current iframe URL if parent is inaccessible
+            const currentPath = window.location.pathname;
+            const pageName = currentPath.split('/').pop().replace('.html', '');
+            document.querySelectorAll('.nav-link').forEach(link => {
+                const linkPage = link.getAttribute('data-page');
+                if (linkPage === pageName) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
+        }
+    }
+
+    // Run on page load
+    setActiveLink();
+</script>
+</body>
+</html>

@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TB Patient Registration</title>
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        *,
+        *:before,
+        *:after {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0052CC; /* Jio-inspired vibrant blue */
+            --accent: #FF3D00; /* Hotstar/Jio-inspired red-orange */
+            --dark: #1A2526; /* Sleek dark teal-gray */
+            --light: #F5F7FA; /* Clean light gray */
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+        }
+
+        section {
+            /* padding: 40px 20px; */
+            width: 100%;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            text-align: center;
+            font-weight: 700;
+            /* margin-bottom: 15px; */
+            padding: 10px 0px 0px 0px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .page-para_licencetilte {
+            text-align: center;
+            color: var(--dark);
+            padding-block: 10px;
+            font-weight: 400;
+            font-size: 0.875rem;
+            padding-top: 0px;
+        }
+
+        .disclaimer {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 20px auto 0;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .page-para_licence {
+            color: var(--dark);
+            font-size: 0.875rem;
+            line-height: 1.5;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        form {
+            width: 100%;
+            margin: 0 auto;
+            background: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 80px;
+            color: var(--dark);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .mainform {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        details {
+            grid-column: 1 / -1;
+            background: #fff;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        summary {
+            border: 1px solid #E0E0E0;
+            color: var(--dark);
+            padding: 10px 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 4px;
+            transition: border-color 0.2s ease;
+        }
+
+        summary:hover {
+            border-color: var(--accent);
+        }
+
+        summary i:not(.fa-chevron-down) {
+            color: var(--primary);
+        }
+
+        summary i.fa-chevron-down {
+            margin-left: auto;
+            color: var(--dark);
+            transition: transform 0.2s ease;
+        }
+
+        details[open] summary i.fa-chevron-down {
+            transform: rotate(180deg);
+        }
+
+        details .content {
+            padding: 12px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .field-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .field-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            color: var(--dark);
+            font-size: 0.875rem;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        input[type="text"], input[type="tel"], input[type="email"], input[type="date"], input[type="number"], textarea {
+            height: 40px;
+            width: 100%;
+            border-radius: 4px;
+            padding: 0 10px;
+            font-size: 0.875rem;
+            border: 1px solid var(--primary);
+            color: var(--dark);
+            background-color: #fff;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+            padding: 10px;
+        }
+
+        input::placeholder {
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        input:focus, textarea:focus {
+            border-color: var(--accent);
+        }
+
+        .custom-dropdown {
+            position: relative;
+            height: 40px;
+            border: 1px solid var(--primary);
+            border-radius: 4px;
+            background: #fff;
+            cursor: pointer;
+            transition: border-color 0.2s ease;
+        }
+
+        .custom-dropdown:hover, .custom-dropdown:focus-within {
+            border-color: var(--accent);
+        }
+
+        .dropdown-selected {
+            padding: 0 10px;
+            line-height: 40px;
+            font-size: 0.875rem;
+            color: var(--dark);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dropdown-selected i {
+            color: var(--primary);
+            transition: transform 0.2s ease;
+        }
+
+        .custom-dropdown.open i {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-options {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: #fff;
+            border: 1px solid var(--primary);
+            border-radius: 4px;
+            margin-top: 2px;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+            z-index: 10;
+        }
+
+        .custom-dropdown.open .dropdown-options {
+            display: block;
+        }
+
+        .dropdown-options li {
+            padding: 8px 10px;
+            font-size: 0.875rem;
+            color: var(--dark);
+            list-style: none;
+            transition: background 0.2s ease;
+        }
+
+        .dropdown-options li:hover {
+            background: var(--light);
+        }
+
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .radio-group label, .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 400;
+            font-size: 0.875rem;
+            cursor: pointer;
+            position: relative;
+            padding-left: 24px;
+        }
+
+        input[type="radio"], input[type="checkbox"] {
+            opacity: 0;
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            margin: 0;
+        }
+
+        .radio-group label::before, .checkbox-group label::before {
+            content: '';
+            width: 16px;
+            height: 16px;
+            border: 1px solid var(--primary);
+            border-radius: 4px;
+            position: absolute;
+            left: 0;
+            transition: all 0.2s ease;
+        }
+
+        .radio-group label::before {
+            border-radius: 50%;
+        }
+
+        input[type="checkbox"]:checked + label::before {
+            background: var(--primary);
+            border-color: var(--primary);
+            content: '\2713';
+            color: #fff;
+            font-size: 12px;
+            text-align: center;
+            line-height: 16px;
+        }
+
+        input[type="radio"]:checked + label::before {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        input[type="radio"]:checked + label::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            border-radius: 50%;
+            position: absolute;
+            left: 4px;
+            top: 4px;
+        }
+
+        input[type="radio"]:focus + label::before, input[type="checkbox"]:focus + label::before {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(255, 61, 0, 0.2);
+        }
+
+        .tb-symptoms-group {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .tb-symptoms-group .field-group {
+            flex: 1;
+        }
+
+        .buttonsubmit {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+            color: #fff;
+            width: 160px;
+            height: 40px;
+            margin: 10px auto 0;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            /* text-transform: uppercase; */
+            font-weight: 600;
+            transition: all 0.2s ease;
+            grid-column: 1 / -1;
+        }
+
+        .buttonsubmit:hover {
+            background: linear-gradient(90deg, var(--accent) 0%, var(--primary) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .button {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+            color: #fff;
+            padding: 8px 25px;
+            text-decoration: none;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            cursor: pointer;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            /* text-transform: uppercase; */
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .button:hover {
+            background: linear-gradient(90deg, var(--accent) 0%, var(--primary) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .emblem {
+            width: 80px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .mainform, details .content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .tb-symptoms-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+            section {
+                padding: 20px 10px;
+            }
+            .button {
+                position: relative;
+                margin-bottom: 10px;
+                right: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .mainform, details .content {
+                grid-template-columns: 1fr;
+            }
+            .page-title {
+                font-size: 1.5rem;
+            }
+            .page-para_licencetilte, .page-para_licence {
+                font-size: 0.75rem;
+            }
+            .emblem {
+                display: none;
+            }
+            summary {
+                font-size: 0.875rem;
+                padding: 8px 10px;
+            }
+            details .content {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section>
+        <div id="main">
+            <form action="register.php" method="post" id="registrationForm">
+                <a href="/index.html" class="button">Home</a>
+                <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Seal_of_Uttarakhand.svg" alt="Emblem_of_Uttarakhand" class="emblem">
+                <h1 class="page-title">New TB Patient Registration</h1>
+                <p class="page-para_licencetilte">Patient Information</p>
+                <div class="mainform">
+                    <details open>
+                        <summary><i class="fas fa-user"></i> Personal Details <i class="fas fa-chevron-down"></i></summary>
+                        <div class="content">
+                            <div class="field-group">
+                                <label for="patient_name">Patient’s Full Name</label>
+                                <input type="text" name="patient_name" id="patient_name" placeholder="Enter Full Name" required>
+                            </div>
+                            <div class="field-group">
+                                <label for="dob">Date of Birth</label>
+                                <input type="date" name="dob" id="dob" required>
+                            </div>
+                            <div class="field-group">
+                                <label for="gender">Gender</label>
+                                <div class="custom-dropdown" id="gender-dropdown" tabindex="0">
+                                    <input type="hidden" name="gender" id="gender">
+                                    <span class="dropdown-selected">Select Gender <i class="fas fa-chevron-down"></i></span>
+                                    <ul class="dropdown-options">
+                                        <li data-value="Male">Male</li>
+                                        <li data-value="Female">Female</li>
+                                        <li data-value="Other">Other</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="field-group">
+                                <label for="guardian_name">Guardian’s Name (if minor)</label>
+                                <input type="text" name="guardian_name" id="guardian_name" placeholder="Enter Guardian’s Name">
+                            </div>
+                            <div class="field-group">
+                                <label for="parent_name">Father's/Mother's Name</label>
+                                <input type="text" name="parent_name" id="parent_name" placeholder="Enter Parent’s Name" required>
+                            </div>
+                            <div class="field-group">
+                                <label for="occupation">Occupation</label>
+                                <input type="text" name="occupation" id="occupation" placeholder="Enter Occupation">
+                            </div>
+                            <div class="field-group">
+                                <label for="education_level">Education Level</label>
+                                <input type="text" name="education_level" id="education_level" placeholder="Enter Education Level">
+                            </div>
+                            <div class="field-group">
+                                <label for="family_income">Family Income (INR)</label>
+                                <input type="number" name="family_income" id="family_income" placeholder="Enter Income">
+                            </div>
+                            <div class="field-group">
+                                <label for="registration_type">Registration Type</label>
+                                <div class="custom-dropdown" id="registration_type-dropdown" tabindex="0">
+                                    <input type="hidden" name="registration_type" id="registration_type">
+                                    <span class="dropdown-selected">Select Type <i class="fas fa-chevron-down"></i></span>
+                                    <ul class="dropdown-options">
+                                        <li data-value="New">New</li>
+                                        <li data-value="Transfer">Transfer</li>
+                                        <li data-value="Follow-up">Follow-up</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+                    <details>
+                        <summary><i class="fas fa-phone"></i> Contact Details <i class="fas fa-chevron-down"></i></summary>
+                        <div class="content">
+                            <div class="field-group">
+                                <label for="phone">Mobile Number</label>
+                                <input type="tel" name="phone" id="phone" placeholder="Enter 10-digit Number" pattern="[0-9]{10}" required>
+                            </div>
+                            <div class="field-group">
+                                <label for="alt_phone">Alternate Contact</label>
+                                <input type="tel" name="alt_phone" id="alt_phone" placeholder="Enter 10-digit Number" pattern="[0-9]{10}">
+                            </div>
+                            <div class="field-group">
+                                <label for="email">Email ID</label>
+                                <input type="email" name="email" id="email" placeholder="Enter Email (optional)">
+                            </div>
+                        </div>
+                    </details>
+                    <details>
+                        <summary><i class="fas fa-map-marker-alt"></i> Address Details <i class="fas fa-chevron-down"></i></summary>
+                        <div class="content">
+                            <div class="field-group">
+                                <label for="residential_address">Residential Address</label>
+                                <input type="text" name="residential_address" id="residential_address" placeholder="Enter Address" required>
+                            </div>
+                            <div class="field-group">
+                                <label for="village">Village/Town/City</label>
+                                <input type="text" name="village" id="village" placeholder="Enter Village/Town/City" required>
+                            </div>
+                            <div class="field-group">
+                                <label for="district">District</label>
+                                <input type="text" name="district" id="district" placeholder="Enter District" required>
+                            </div>
+                            <div class="field-group">
+                                <label for="state">State</label>
+                                <div class="custom-dropdown" id="state-dropdown" tabindex="0">
+                                    <input type="hidden" name="state" id="state">
+                                    <span class="dropdown-selected">Select State <i class="fas fa-chevron-down"></i></span>
+                                    <ul class="dropdown-options">
+                                        <li data-value="Andhra Pradesh">Andhra Pradesh</li>
+                                        <li data-value="Arunachal Pradesh">Arunachal Pradesh</li>
+                                        <li data-value="Assam">Assam</li>
+                                        <li data-value="Bihar">Bihar</li>
+                                        <li data-value="Chhattisgarh">Chhattisgarh</li>
+                                        <li data-value="Delhi">Delhi</li>
+                                        <li data-value="Goa">Goa</li>
+                                        <li data-value="Gujarat">Gujarat</li>
+                                        <li data-value="Haryana">Haryana</li>
+                                        <li data-value="Himachal Pradesh">Himachal Pradesh</li>
+                                        <li data-value="Jammu and Kashmir">Jammu and Kashmir</li>
+                                        <li data-value="Jharkhand">Jharkhand</li>
+                                        <li data-value="Karnataka">Karnataka</li>
+                                        <li data-value="Kerala">Kerala</li>
+                                        <li data-value="Madhya Pradesh">Madhya Pradesh</li>
+                                        <li data-value="Maharashtra">Maharashtra</li>
+                                        <li data-value="Manipur">Manipur</li>
+                                        <li data-value="Meghalaya">Meghalaya</li>
+                                        <li data-value="Mizoram">Mizoram</li>
+                                        <li data-value="Nagaland">Nagaland</li>
+                                        <li data-value="Odisha">Odisha</li>
+                                        <li data-value="Punjab">Punjab</li>
+                                        <li data-value="Rajasthan">Rajasthan</li>
+                                        <li data-value="Sikkim">Sikkim</li>
+                                        <li data-value="Tamil Nadu">Tamil Nadu</li>
+                                        <li data-value="Telangana">Telangana</li>
+                                        <li data-value="Tripura">Tripura</li>
+                                        <li data-value="Uttar Pradesh">Uttar Pradesh</li>
+                                        <li data-value="Uttarakhand">Uttarakhand</li>
+                                        <li data-value="West Bengal">West Bengal</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="field-group">
+                                <label for="pincode">PIN Code</label>
+                                <input type="text" name="pincode" id="pincode" pattern="[0-9]{6}" placeholder="Enter 6-digit PIN Code" required>
+                            </div>
+                        </div>
+                    </details>
+                    <details>
+                        <summary><i class="fas fa-stethoscope"></i> TB Case Details <i class="fas fa-chevron-down"></i></summary>
+                        <div class="content">
+                            <div class="field-group">
+                                <label for="aadhaar_abha">Aadhaar/ABHA ID</label>
+                                <input type="text" name="aadhaar_abha" id="aadhaar_abha" placeholder="Enter 12-digit ID" required>
+                            </div>
+                            <div class="field-group">
+                                <label for="diagnosis_date">Diagnosis Date</label>
+                                <input type="date" name="diagnosis_date" id="diagnosis_date" required>
+                            </div>
+                            <div class="field-group">
+                                <label for="symptom_duration">Symptom Duration</label>
+                                <input type="text" name="symptom_duration" id="symptom_duration" placeholder="Enter Duration in Weeks" required>
+                            </div>
+                            <div class="field-group">
+                                <label for="dots_provider">DOTS Provider</label>
+                                <input type="text" name="dots_provider" id="dots_provider" placeholder="Enter Provider Name" required>
+                            </div>
+                            <div class="field-group full-width tb-symptoms-group">
+                                <div class="field-group">
+                                    <label>TB Case Type</label>
+                                    <div class="radio-group">
+                                        <label><input type="radio" name="tb_case_type" value="Pulmonary" required> Pulmonary</label>
+                                        <label><input type="radio" name="tb_case_type" value="Extra-Pulmonary"> Extra-Pulmonary</label>
+                                    </div>
+                                </div>
+                                <div class="field-group">
+                                    <label>Symptoms</label>
+                                    <div class="checkbox-group">
+                                        <label><input type="checkbox" name="symptoms[]" value="Cough"> Cough</label>
+                                        <label><input type="checkbox" name="symptoms[]" value="Fever"> Fever</label>
+                                        <label><input type="checkbox" name="symptoms[]" value="Weight Loss"> Weight Loss</label>
+                                        <label><input type="checkbox" name="symptoms[]" value="Fatigue"> Fatigue</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field-group full-width">
+                                <label for="notes">Additional Notes</label>
+                                <textarea name="notes" id="notes" placeholder="Enter any additional notes"></textarea>
+                            </div>
+                        </div>
+                    </details>
+                    <button class="buttonsubmit" type="submit" name="submit">Register</button>
+                </div>
+                <div class="disclaimer">
+                        <p class="page-para_licence">By clicking submit, you confirm the accuracy of the patient's information.</p>
+                        <p class="page-para_licence">Please note: Verification may require supporting medical and identity documents.</p>
+                    </div>
+                     <iframe src="../pages/TB_Dash_Footer.html" frameborder="0" style="height: 110px;overflow: auto;"></iframe>
+            </form>
+        </div>
+       
+    </section>
+
+    <script>
+        // Custom Dropdown Functionality
+        document.querySelectorAll('.custom-dropdown').forEach(dropdown => {
+            const selected = dropdown.querySelector('.dropdown-selected');
+            const hiddenInput = dropdown.querySelector('input[type="hidden"]');
+            const options = dropdown.querySelector('.dropdown-options');
+            const optionItems = options.querySelectorAll('li');
+
+            selected.addEventListener('click', () => {
+                dropdown.classList.toggle('open');
+            });
+
+            optionItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    selected.textContent = item.textContent;
+                    hiddenInput.value = item.getAttribute('data-value');
+                    dropdown.classList.remove('open');
+                    if (dropdown.id === 'gender-dropdown' || dropdown.id === 'registration_type-dropdown') {
+                        hiddenInput.required = true;
+                    }
+                });
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', e => {
+                if (!dropdown.contains(e.target)) {
+                    dropdown.classList.remove('open');
+                }
+            });
+
+            // Keyboard navigation
+            dropdown.addEventListener('keydown', e => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    dropdown.classList.toggle('open');
+                    e.preventDefault();
+                }
+            });
+        });
+
+        // Form Validation
+        document.getElementById('registrationForm').addEventListener('submit', function (event) {
+            const form = event.target;
+            const phone = form.phone.value;
+            const altPhone = form.alt_phone.value;
+            const pincode = form.pincode.value;
+            const aadhaarAbha = form.aadhaar_abha.value;
+            const gender = form.gender.value;
+            const registration_type = form.registration_type.value;
+
+            if (!/^\d{10}$/.test(phone) || (altPhone && !/^\d{10}$/.test(altPhone))) {
+                alert('Please enter valid 10-digit phone numbers.');
+                event.preventDefault();
+            }
+            if (!/^\d{6}$/.test(pincode)) {
+                alert('Please enter a valid 6-digit PIN code.');
+                event.preventDefault();
+            }
+            if (!/^\d{12}$/.test(aadhaarAbha)) {
+                alert('Please enter a valid 12-digit Aadhaar or ABHA ID.');
+                event.preventDefault();
+            }
+            if (!form.tb_case_type.value) {
+                alert('Please select a TB Case Type.');
+                event.preventDefault();
+            }
+            if (!gender) {
+                alert('Please select a Gender.');
+                event.preventDefault();
+            }
+            if (!registration_type) {
+                alert('Please select a Registration Type.');
+                event.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>
