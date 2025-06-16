@@ -142,7 +142,6 @@
       height: 49px;
       border-radius: 4px;
       color: #fff;
-      /* text-transform: uppercase; */
       font-weight: 600;
       margin: 10px 0;
       cursor: pointer;
@@ -544,10 +543,8 @@
       e.preventDefault();
       const username = document.querySelector("#signin-username").value.trim();
       localStorage.setItem("username", username || "");
-      showToast("You are logged in successfully!");
-      setTimeout(() => {
-        window.location.href = loginBtn.href;
-      }, 1000); // Delay redirect to show toast
+      // Redirect with action=login query parameter
+      window.location.href = `${loginBtn.href}?action=login`;
     });
 
     // Handle signup

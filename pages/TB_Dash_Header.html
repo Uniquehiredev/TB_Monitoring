@@ -17,6 +17,7 @@
         /* Explicit font stack */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            position: relative; /* Ensure body is positioned for toast container fallback */
         }
         /* Icon styling for logout */
         .logout-icon {
@@ -119,6 +120,47 @@
         header p {
             color: #6b7280; /* Gray-500 */
         }
+        /* Toast Notification Styles */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .toast {
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+            color: #fff;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideIn 0.3s ease-in-out forwards, slideOut 0.3s ease-in-out 2.7s forwards;
+            font-size: 1rem;
+            font-weight: 500;
+            max-width: 300px;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes slideOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -175,12 +217,100 @@
         welcomeText.textContent = username ? `Welcome ${username}` : 'Welcome Administrator';
     }
 
+    // Create and append toast container to parent or current document
+    let toastContainer;
+    function initializeToastContainer() {
+        toastContainer = document.createElement('div');
+        toastContainer.className = 'toast-container';
+        try {
+            // Try to append to parent document's body (for iframe case)
+            window.parent.document.body.appendChild(toastContainer);
+            // Inject toast styles into parent document
+            const style = document.createElement('style');
+            style.textContent = `
+                .toast-container {
+                    position: fixed;
+                    bottom: 20px;
+                    right: 20px;
+                    z-index: 1000;
+                }
+                .toast {
+                    background: linear-gradient(90deg, #0052CC 0%, #FF3D00 100%);
+                    color: #fff;
+                    padding: 15px 20px;
+                    border-radius: 8px;
+                    margin-bottom: 10px;
+                    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+                    opacity: 0;
+                    transform: translateY(20px);
+                    animation: slideIn 0.3s ease-in-out forwards, slideOut 0.3s ease-in-out 2.7s forwards;
+                    font-size: 1rem;
+                    font-weight: 500;
+                    max-width: 300px;
+                }
+                @keyframes slideIn {
+                    from { opacity: 0; transform: translateY(20px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                @keyframes slideOut {
+                    from { opacity: 1; transform: translateY(0); }
+                    to { opacity: 0; transform: translateY(20px); }
+                }
+            `;
+            window.parent.document.head.appendChild(style);
+        } catch (e) {
+            console.warn('Cannot access parent document, appending toast container to current document:', e);
+            // Fallback to current document's body
+            document.body.appendChild(toastContainer);
+        }
+    }
+
+    // Toast notification function
+    function showToast(message) {
+        if (!toastContainer) {
+            console.warn('Toast container not initialized');
+            return;
+        }
+        const toast = document.createElement("div");
+        toast.className = "toast";
+        toast.textContent = message;
+        toastContainer.appendChild(toast);
+
+        // Remove toast after 3 seconds
+        setTimeout(() => {
+            toast.remove();
+        }, 3000);
+    }
+
     // Run on page load
     updateWelcomeText();
+    initializeToastContainer();
 
     // Handle logout
     logoutBtn.addEventListener('click', () => {
         localStorage.removeItem('username');
+    });
+
+    // Handle login toast on page load
+    window.addEventListener("load", () => {
+        let urlParams;
+        try {
+            // Try to access parent URL (for iframe case)
+            urlParams = new URLSearchParams(window.parent.location.search);
+        } catch (e) {
+            // Fallback to current window if parent is inaccessible
+            urlParams = new URLSearchParams(window.location.search);
+        }
+        if (urlParams.get("action") === "login") {
+            showToast("You are logged in successfully!");
+            // Clean up URL in parent window
+            try {
+                window.parent.history.replaceState({}, document.title, window.parent.location.pathname);
+            } catch (e) {
+                // Fallback to current window
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        }
     });
 
     hamburger.addEventListener('click', () => {
